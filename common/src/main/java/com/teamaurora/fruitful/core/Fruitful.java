@@ -1,5 +1,7 @@
 package com.teamaurora.fruitful.core;
 
+import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
+import com.teamaurora.fruitful.core.registry.FruitfulItems;
 import gg.moonflower.pollen.api.platform.Platform;
 
 public class Fruitful {
@@ -18,6 +20,8 @@ public class Fruitful {
     }
 
     public static void onCommonInit() {
+        FruitfulBlocks.BLOCKS.register(Fruitful.PLATFORM);
+        FruitfulItems.ITEMS.register(Fruitful.PLATFORM);
     }
 
     public static void onCommonPostInit(Platform.ModSetupContext ctx) {

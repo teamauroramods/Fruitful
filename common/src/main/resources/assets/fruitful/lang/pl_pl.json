@@ -1,0 +1,23 @@
+{
+  "block.fruitful.apple_oak_leaves": "Dębowe liście z jabłkami",
+  "block.fruitful.flowering_oak_leaves": "Kwitnące dębowe liście",
+  "block.fruitful.budding_oak_leaves": "Kiełkujące dębowe liście",
+  "block.fruitful.blossoming_oak_leaves": "Rozkwitające dębowe liście",
+
+  "block.fruitful.apple_oak_leaf_carpet": "Warstwa dębowych liści z jabłkami",
+  "block.fruitful.flowering_oak_leaf_carpet": "Warstwa kwitnących dębowych liści",
+  "block.fruitful.budding_oak_leaf_carpet": "Warstwa kiełkujących dębowych liści",
+  "block.fruitful.blossoming_oak_leaf_carpet": "Warstwa rozkwitających dębowych liści",
+
+  "block.fruitful.apple_oak_hedge": "Dębowy żywopłot z jabłkami",
+  "block.fruitful.flowering_oak_hedge": "Kwitnący dębowy żywopłot",
+  "block.fruitful.budding_oak_hedge": "Kiełkujący dębowy żywopłot",
+  "block.fruitful.blossoming_oak_hedge": "Rozkwitający dębowy żywopłot",
+
+  "block.fruitful.flowering_oak_sapling": "Sadzonka kwitnącego dębu",
+  "block.fruitful.potted_flowering_oak_sapling": "Sadzonka kwitnącego dębu w doniczce",
+  
+  "effect.fruitful.sustaining": "Podtrzymywanie",
+
+  "item.fruitful.baked_apple": "Pieczone jabłko"
+}
