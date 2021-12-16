@@ -1,14 +1,14 @@
-package gg.moonflower.starter.core;
+package com.teamaurora.fruitful.core;
 
 import gg.moonflower.pollen.api.platform.Platform;
 
-public class Starter {
-    public static final String MOD_ID = "starter";
+public class Fruitful {
+    public static final String MOD_ID = "fruitful";
     public static final Platform PLATFORM = Platform.builder(MOD_ID)
-            .clientInit(Starter::onClientInit)
-            .clientPostInit(Starter::onClientPostInit)
-            .commonInit(Starter::onCommonInit)
-            .commonPostInit(Starter::onCommonPostInit)
+            .clientInit(Fruitful::onClientInit)
+            .clientPostInit(Fruitful::onClientPostInit)
+            .commonInit(Fruitful::onCommonInit)
+            .commonPostInit(Fruitful::onCommonPostInit)
             .build();
 
     public static void onClientInit() {
