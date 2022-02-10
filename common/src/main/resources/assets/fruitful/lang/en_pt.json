@@ -1,0 +1,23 @@
+{
+  "block.fruitful.apple_oak_leaves": "Fruitin' leaves",
+  "block.fruitful.flowering_oak_leaves": "Pretty leaves o' oak",
+  "block.fruitful.budding_oak_leaves": "Buddin' leaves",
+  "block.fruitful.blossoming_oak_leaves": "Blossomin' leaves o' oak",
+
+  "block.fruitful.apple_oak_leaf_carpet": "Orchard's windfall",
+  "block.fruitful.flowering_oak_leaf_carpet": "Fallen pretty oak leaves",
+  "block.fruitful.budding_oak_leaf_carpet": "Fallen buddin' leaves o' oak",
+  "block.fruitful.blossoming_oak_leaf_carpet": "Blossomin' fallen leaves",
+
+  "block.fruitful.apple_oak_hedge": "Fruitin' shrubbery",
+  "block.fruitful.flowering_oak_hedge": "Flowerin' shrubbery",
+  "block.fruitful.budding_oak_hedge": "Buddin' shrubbery",
+  "block.fruitful.blossoming_oak_hedge": "Blossomin' shrubbery",
+
+  "block.fruitful.flowering_oak_sapling": "Flowerin' meager shrub",
+  "block.fruitful.potted_flowering_oak_sapling": "Captive flowerin' meager shrub",
+
+  "effect.fruitful.sustaining": "Healthy rations",
+
+  "item.fruitful.baked_apple": "Apple o' glaze"
+}
