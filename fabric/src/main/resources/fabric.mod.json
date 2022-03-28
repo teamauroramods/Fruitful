@@ -5,13 +5,13 @@
   "name": "${name}",
   "description": "Various improvements to the fruits in Minecraft.",
   "authors": [ "Team Aurora" ],
-  "contributors": [ "An author", "Another author", "The last author" ],
   "contact": {
     "homepage": "https://discord.gg/teamaurora",
-	"issues": "https://github.com/TeamAuroraMods/${repo}/issues",
-    "sources": "https://github.com/TeamAuroraMods/${repo}/"
+	"issues": "https://github.com/TeamAuroraMods/Fruitful/issues",
+    "sources": "https://github.com/TeamAuroraMods/Fruitful/"
   },
   "license": "GPLv3",
+  "icon": "icon.png",
   "environment": "*",
   "mixins": [
     "${id}-common.mixins.json",
@@ -25,6 +25,6 @@
   "depends": {
     "fabric": "*",
     "minecraft": "1.18.x",
-    "pollen": "1.0.0"
+    "pollen": ">=1.2.0 <2.0.0"
   }
 }
