@@ -1,6 +1,8 @@
 package com.teamaurora.fruitful.core.registry;
 
 import com.teamaurora.fruitful.common.block.FruitLeavesBlock;
+import com.teamaurora.fruitful.common.block.LeafCarpetBlock;
+import com.teamaurora.fruitful.common.block.trees.FloweringOakTree;
 import com.teamaurora.fruitful.core.Fruitful;
 import gg.moonflower.pollen.api.registry.PollinatedRegistry;
 import net.minecraft.core.BlockPos;
@@ -11,10 +13,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -26,20 +25,47 @@ public class FruitfulBlocks {
     public static final PollinatedRegistry<Block> BLOCKS = PollinatedRegistry.create(Registry.BLOCK, Fruitful.MOD_ID);
 
     /* Apple Oak Trees */
-    public static final Supplier<Block> APPLE_OAK_LEAVES = registerBlock("apple_oak_leaves", () -> new FruitLeavesBlock(Properties.APPLE_OAK_LEAVES, Blocks.OAK_LEAVES, ()-> Items.APPLE), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
-    public static final Supplier<Block> FLOWERING_OAK_LEAVES = registerBlock("flowering_oak_leaves", () -> new LeavesBlock(Properties.APPLE_OAK_LEAVES), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
+    public static final Supplier<Block> FLOWERING_OAK_LEAVES = registerBlock("flowering_oak_leaves", ()-> new OakFlowerLeavesBlock(Properties.FLOWERING_OAK_LEAVES), CreativeModeTab.TAB_DECORATIONS);
+    public static final Supplier<Block> BUDDING_OAK_LEAVES = registerBlock("budding_oak_leaves", ()-> new OakFlowerLeavesBlock(Properties.FLOWERING_OAK_LEAVES), CreativeModeTab.TAB_DECORATIONS);
+    public static final Supplier<Block> BLOSSOMING_OAK_LEAVES = registerBlock("blossoming_oak_leaves", ()-> new OakBlossomBlock(Properties.FLOWERING_OAK_LEAVES), CreativeModeTab.TAB_DECORATIONS);
+    public static final Supplier<Block> APPLE_OAK_LEAVES = registerBlock("apple_oak_leaves", ()-> new FruitLeavesBlock(Properties.FLOWERING_OAK_LEAVES, BUDDING_OAK_LEAVES.get(), ()->Items.APPLE), CreativeModeTab.TAB_DECORATIONS);
 
-    private static Supplier<Block> registerBlock(String id, Supplier<Block> block, Item.Properties properties) {
+    public static final Supplier<Block> FLOWERING_OAK_LEAF_CARPET = registerBlock("flowering_oak_leaf_carpet", ()-> new LeafCarpetBlock(Properties.FLOWERING_OAK_CARPET), CreativeModeTab.TAB_DECORATIONS);
+    public static final Supplier<Block> BUDDING_OAK_LEAF_CARPET = registerBlock("budding_oak_leaf_carpet", ()-> new LeafCarpetBlock(Properties.FLOWERING_OAK_CARPET), CreativeModeTab.TAB_DECORATIONS);
+    public static final Supplier<Block> BLOSSOMING_OAK_LEAF_CARPET = registerBlock("blossoming_oak_leaf_carpet", ()-> new LeafCarpetBlock(Properties.FLOWERING_OAK_CARPET), CreativeModeTab.TAB_DECORATIONS);
+    public static final Supplier<Block> APPLE_OAK_LEAF_CARPET = registerBlock("apple_oak_leaf_carpet", ()-> new LeafCarpetBlock(Properties.FLOWERING_OAK_CARPET), CreativeModeTab.TAB_DECORATIONS);
+
+    public static final Supplier<Block> FLOWERING_OAK_SAPLING = registerBlock("flowering_oak_sapling", ()-> new SaplingBlock(new FloweringOakTree(), Properties.FLOWERING_OAK_SAPLING), CreativeModeTab.TAB_DECORATIONS);
+    public static final Supplier<Block> POTTED_FLOWERING_OAK_SAPLING = registerPotted("potted_flowering_oak_sapling", () -> new FlowerPotBlock(FLOWERING_OAK_SAPLING.get(), BlockBehaviour.Properties.copy(Blocks.POTTED_ALLIUM)));
+
+    private static Supplier<Block> registerBlock(String id, Supplier<Block> block, CreativeModeTab tab) {
         Supplier<Block> register = BLOCKS.register(id, block);
-        FruitfulItems.ITEMS.register(id, () -> new BlockItem(register.get(), properties));
+        FruitfulItems.ITEMS.register(id, () -> new BlockItem(register.get(), new Item.Properties().tab(tab)));
+        return register;
+    }
+
+    private static Supplier<Block> registerPotted(String id, Supplier<Block> block) {
+        Supplier<Block> register = BLOCKS.register(id, () -> new FlowerPotBlock(block.get(), Properties.POTTED_PLANT));
         return register;
     }
 
     public static final class Properties {
-        public static final BlockBehaviour.Properties APPLE_OAK_LEAVES = BlockBehaviour.Properties.of(Material.LEAVES, MaterialColor.COLOR_GREEN).noOcclusion().strength(0.2F).randomTicks().sound(SoundType.GRASS).isValidSpawn(Properties::allowsSpawnOnLeaves).isSuffocating(Properties::isntSolid).isViewBlocking(Properties::isntSolid);
+        public static final BlockBehaviour.Properties APPLE_OAK_LEAVES = BlockBehaviour.Properties.of(Material.LEAVES, MaterialColor.GRASS).noOcclusion().strength(0.2F).randomTicks().sound(SoundType.GRASS).isValidSpawn(Properties::allowsSpawnOnLeaves).isSuffocating(Properties::isntSolid).isViewBlocking(Properties::isntSolid);
+        public static final BlockBehaviour.Properties FLOWERING_OAK_LEAVES = BlockBehaviour.Properties.of(Material.LEAVES, MaterialColor.GRASS).noOcclusion().strength(0.2F).randomTicks().sound(SoundType.CROP).isValidSpawn(FruitfulBlocks.Properties::allowsSpawnOnLeaves).isSuffocating(FruitfulBlocks.Properties::isntSolid).isViewBlocking(FruitfulBlocks.Properties::isntSolid);
+        public static final BlockBehaviour.Properties FLOWERING_OAK_CARPET = BlockBehaviour.Properties.of(Material.WOOL, MaterialColor.GRASS).strength(0.0F).sound(SoundType.CROP).noOcclusion();
+        public static final BlockBehaviour.Properties FLOWERING_OAK_SAPLING = Block.Properties.of(Material.PLANT, MaterialColor.GRASS).noCollission().randomTicks().strength(0.0F).sound(SoundType.CROP);
+        public static final BlockBehaviour.Properties POTTED_PLANT = BlockBehaviour.Properties.copy(Blocks.POTTED_ALLIUM);
 
         public static boolean allowsSpawnOnLeaves(BlockState state, BlockGetter access, BlockPos pos, EntityType<?> entity) {
             return entity == EntityType.OCELOT || entity == EntityType.PARROT;
+        }
+
+        public static boolean alwaysAllowSpawn(BlockState state, BlockGetter reader, BlockPos pos, EntityType<?> entity) {
+            return true;
+        }
+
+        public static boolean needsPostProcessing(BlockState state, BlockGetter reader, BlockPos pos) {
+            return true;
         }
 
         public static boolean isntSolid(BlockState state, BlockGetter reader, BlockPos pos) {

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "fruitful:block/flowering_oak_sapling"
+  }
+}

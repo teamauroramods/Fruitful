@@ -1,0 +1,23 @@
+{
+  "block.fruitful.apple_oak_leaves": "Foglie di quercia con mele",
+  "block.fruitful.flowering_oak_leaves": "Foglie di quercia fiorenti",
+  "block.fruitful.budding_oak_leaves": "Foglie di quercia germoglianti",
+  "block.fruitful.blossoming_oak_leaves": "Foglie di quercia sboccianti",
+
+  "block.fruitful.apple_oak_leaf_carpet": "Tappeto di foglie di quercia con mele",
+  "block.fruitful.flowering_oak_leaf_carpet": "Tappeto di foglie di quercia fiorenti",
+  "block.fruitful.budding_oak_leaf_carpet": "Tappeto di foglie di quercia germoglianti",
+  "block.fruitful.blossoming_oak_leaf_carpet": "Tappeto di foglie di quercia sboccianti",
+
+  "block.fruitful.apple_oak_hedge": "Siepe di quercia con mele",
+  "block.fruitful.flowering_oak_hedge": "Siepe di quercia fiorente",
+  "block.fruitful.budding_oak_hedge": "Siepe di quercia germogliante",
+  "block.fruitful.blossoming_oak_hedge": "Siepe di quercia sbocciante",
+
+  "block.fruitful.flowering_oak_sapling": "Arboscello di quercia fiorente",
+  "block.fruitful.potted_flowering_oak_sapling": "Arboscello di quercia fiorente",
+
+  "effect.fruitful.sustaining": "Sostenimento",
+
+  "item.fruitful.baked_apple": "Mela al forno"
+}

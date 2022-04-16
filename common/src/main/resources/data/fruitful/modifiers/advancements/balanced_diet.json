@@ -1,0 +1,26 @@
+{
+  "advancement": "minecraft:husbandry/balanced_diet",
+  "modifiers": [
+    {
+      "type": "criteria",
+      "config": {
+        "mode": "modify",
+        "criteria": {
+          "fruitful:baked_apple": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+              "item": {
+                "item": "fruitful:baked_apple"
+              }
+            }
+          }
+        },
+        "requirements": [
+          [
+            "fruitful:baked_apple"
+          ]
+        ]
+      }
+    }
+  ]
+}

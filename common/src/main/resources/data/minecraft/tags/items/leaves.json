@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "fruitful:apple_oak_leaves",
-    "fruitful:flowering_oak_leaves"
+    "fruitful:flowering_oak_leaves",
+    "fruitful:blossoming_oak_leaves",
+    "fruitful:budding_oak_leaves"
   ]
 }

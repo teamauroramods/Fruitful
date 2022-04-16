@@ -1,0 +1,23 @@
+{
+  "block.fruitful.apple_oak_leaves": "Folhas de carvalho com maçãs",
+  "block.fruitful.flowering_oak_leaves": "Folhas de carvalho floridas",
+  "block.fruitful.budding_oak_leaves": "Folhas de carvalho em botão",
+  "block.fruitful.blossoming_oak_leaves": "Folhas de carvalho em flor",
+
+  "block.fruitful.apple_oak_leaf_carpet": "Tapete de folhas de carvalho com maçãs",
+  "block.fruitful.flowering_oak_leaf_carpet": "Tapete de folhas de carvalho floridas",
+  "block.fruitful.budding_oak_leaf_carpet": "Tapete de folhas de carvalho em botão",
+  "block.fruitful.blossoming_oak_leaf_carpet": "Tapete de folhas de carvalho em flor",
+
+  "block.fruitful.apple_oak_hedge": "Cerca viva de carvalho com maçãs",
+  "block.fruitful.flowering_oak_hedge": "Cerca viva de carvalho florido",
+  "block.fruitful.budding_oak_hedge": "Cerca viva de carvalho em botão",
+  "block.fruitful.blossoming_oak_hedge": "Cerca viva de carvalho em flor",
+
+  "block.fruitful.flowering_oak_sapling": "Muda de carvalho florido",
+  "block.fruitful.potted_flowering_oak_sapling": "Muda de carvalho florido envasado",
+  
+  "effect.fruitful.sustaining": "Sustância",
+
+  "item.fruitful.baked_apple": "Maçã assada"
+}

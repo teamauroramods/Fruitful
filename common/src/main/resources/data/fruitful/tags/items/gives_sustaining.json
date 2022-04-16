@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:apple"
+  ],
+  "optional": [
+    "farmersdelight:apple_pie_slice",
+    "farmersdelight:fruit_salad"
+  ]
+}

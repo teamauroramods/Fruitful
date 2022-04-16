@@ -1,0 +1,1 @@
+{"type": "minecraft:crafting_shaped", "pattern": ["##"], "key": {"#": {"item": "fruitful:apple_oak_leaves"}}, "result": {"item": "fruitful:apple_oak_leaf_carpet", "count": 3}, "conditions": [{"type": "abnormals_core:quark_flag", "flag": "leaf_carpet"}]}
