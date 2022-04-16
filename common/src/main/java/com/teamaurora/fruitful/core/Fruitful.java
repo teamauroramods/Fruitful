@@ -2,6 +2,8 @@ package com.teamaurora.fruitful.core;
 
 import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
 import com.teamaurora.fruitful.core.registry.FruitfulItems;
+import gg.moonflower.pollen.api.config.ConfigManager;
+import gg.moonflower.pollen.api.config.PollinatedConfigType;
 import gg.moonflower.pollen.api.platform.Platform;
 import gg.moonflower.pollen.api.registry.client.ColorRegistry;
 import gg.moonflower.pollen.api.registry.client.RenderTypeRegistry;
@@ -13,9 +15,15 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.block.FireBlock;
 
 public class Fruitful {
+    //TODO: events
+
     public static final String MOD_ID = "fruitful";
+    public static final FruitfulCommonConfig CONFIG = ConfigManager.register(MOD_ID, PollinatedConfigType.COMMON, FruitfulCommonConfig::new);
     public static final Platform PLATFORM = Platform.builder(MOD_ID)
             .clientInit(Fruitful::onClientInit)
             .clientPostInit(Fruitful::onClientPostInit)
@@ -75,5 +83,29 @@ public class Fruitful {
     }
 
     public static void onCommonPostInit(Platform.ModSetupContext ctx) {
+        ctx.enqueueWork(() -> {
+            ComposterBlock.add(0.95f, FruitfulBlocks.APPLE_OAK_LEAVES.get());
+            ComposterBlock.add(0.3f, FruitfulBlocks.FLOWERING_OAK_LEAVES.get());
+            ComposterBlock.add(0.3f, FruitfulBlocks.BUDDING_OAK_LEAVES.get());
+            ComposterBlock.add(0.3f, FruitfulBlocks.BLOSSOMING_OAK_LEAVES.get());
+
+            ComposterBlock.add(0.95f, FruitfulBlocks.APPLE_OAK_LEAF_CARPET.get());
+            ComposterBlock.add(0.3f, FruitfulBlocks.FLOWERING_OAK_LEAF_CARPET.get());
+            ComposterBlock.add(0.3f, FruitfulBlocks.BUDDING_OAK_LEAF_CARPET.get());
+            ComposterBlock.add(0.3f, FruitfulBlocks.BLOSSOMING_OAK_LEAF_CARPET.get());
+
+            ComposterBlock.add(0.3f, FruitfulBlocks.FLOWERING_OAK_SAPLING.get());
+
+            FireBlock fireBlock = (FireBlock) Blocks.FIRE;
+            fireBlock.setFlammable(FruitfulBlocks.APPLE_OAK_LEAVES.get(), 30, 60);
+            fireBlock.setFlammable(FruitfulBlocks.FLOWERING_OAK_LEAVES.get(), 30, 60);
+            fireBlock.setFlammable(FruitfulBlocks.BUDDING_OAK_LEAVES.get(), 30, 60);
+            fireBlock.setFlammable(FruitfulBlocks.BLOSSOMING_OAK_LEAVES.get(), 30, 60);
+
+            fireBlock.setFlammable(FruitfulBlocks.APPLE_OAK_LEAF_CARPET.get(), 30, 60);
+            fireBlock.setFlammable(FruitfulBlocks.FLOWERING_OAK_LEAF_CARPET.get(), 30, 60);
+            fireBlock.setFlammable(FruitfulBlocks.BUDDING_OAK_LEAF_CARPET.get(), 30, 60);
+            fireBlock.setFlammable(FruitfulBlocks.BLOSSOMING_OAK_LEAF_CARPET.get(), 30, 60);
+        });
     }
 }

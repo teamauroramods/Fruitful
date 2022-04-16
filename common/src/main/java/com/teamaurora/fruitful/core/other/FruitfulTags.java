@@ -1,15 +1,15 @@
 package com.teamaurora.fruitful.core.other;
 
 import com.teamaurora.fruitful.core.Fruitful;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import gg.moonflower.pollen.api.registry.resource.TagRegistry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
 
 public class FruitfulTags {
     public static class Items {
-        public static final ITag.INamedTag<Item> GIVES_SUSTAINING = ItemTags.createOptional(new ResourceLocation(Fruitful.MODID, "gives_sustaining"));
-        public static final ITag.INamedTag<Item> GIVES_SUSTAINING_II = ItemTags.createOptional(new ResourceLocation(Fruitful.MODID, "gives_sustaining_ii"));
-        public static final ITag.INamedTag<Item> GIVES_SUSTAINING_LONG = ItemTags.createOptional(new ResourceLocation(Fruitful.MODID, "gives_sustaining_long"));
+        public static final Tag.Named<Item> GIVES_SUSTAINING = TagRegistry.bindItem(new ResourceLocation(Fruitful.MOD_ID, "gives_sustaining"));
+        public static final Tag.Named<Item> GIVES_SUSTAINING_II = TagRegistry.bindItem(new ResourceLocation(Fruitful.MOD_ID, "gives_sustaining_ii"));
+        public static final Tag.Named<Item> GIVES_SUSTAINING_LONG = TagRegistry.bindItem(new ResourceLocation(Fruitful.MOD_ID, "gives_sustaining_long"));
     }
 }

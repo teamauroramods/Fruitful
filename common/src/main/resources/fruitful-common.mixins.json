@@ -6,6 +6,8 @@
   "client": [
   ],
   "mixins": [
+    "BeeEntityFindPollinationTargetGoalMixin",
+    "BeeEntityPollinateGoal"
   ],
   "injectors": {
     "defaultRequire": 1
