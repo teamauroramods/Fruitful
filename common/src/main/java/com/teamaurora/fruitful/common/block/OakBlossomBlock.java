@@ -1,45 +1,40 @@
 package com.teamaurora.fruitful.common.block;
 
-import com.minecraftabnormals.abnormals_core.core.util.item.filling.TargetedItemGroupFiller;
 import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IForgeShearable;
 
 import java.util.Random;
 
 /**
  * @author Exoplanetary, Steven
  */
-public class OakBlossomBlock extends Block implements IForgeShearable {
+public class OakBlossomBlock extends Block implements Shearable {
     public static final IntegerProperty DISTANCE = BlockStateProperties.DISTANCE_1_7;
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
     public static final BooleanProperty POLLINATED = BooleanProperty.create("pollinated");
-    private static final TargetedItemGroupFiller FILLER = new TargetedItemGroupFiller(() -> {
-        return Items.DARK_OAK_LEAVES;
-    });
+//    private static final TargetedItemGroupFiller FILLER = new TargetedItemGroupFiller(() -> {
+//        return Items.DARK_OAK_LEAVES;
+//    });
 
     public OakBlossomBlock(Properties properties) {
         super(properties);
