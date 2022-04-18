@@ -6,6 +6,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 
+/**
+ * @author Exoplanetary, Steven
+ */
+@SuppressWarnings("unused")
 public class FruitfulTags {
     public static class Items {
         public static final Tag.Named<Item> GIVES_SUSTAINING = TagRegistry.bindItem(new ResourceLocation(Fruitful.MOD_ID, "gives_sustaining"));

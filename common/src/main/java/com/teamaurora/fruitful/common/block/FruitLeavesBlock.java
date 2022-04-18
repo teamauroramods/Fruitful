@@ -1,46 +1,50 @@
 package com.teamaurora.fruitful.common.block;
 
-import com.minecraftabnormals.abnormals_core.common.blocks.wood.AbnormalsLeavesBlock;
 import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class FruitLeavesBlock extends AbnormalsLeavesBlock {
+/**
+ * @author Exoplanetary, Steven
+ */
+public class FruitLeavesBlock extends LeavesBlock {
     private final LeavesBlock leavesBlock;
     private final Supplier<Item> fruitItem;
 
-    public FruitLeavesBlock(Properties properties, LeavesBlock leaves, Supplier<Item> fruit) {
+    public FruitLeavesBlock(Properties properties, Block leaves, Supplier<Item> fruit) {
         super(properties);
-        leavesBlock = leaves;
+        leavesBlock = (LeavesBlock)leaves;
         fruitItem = fruit;
     }
 
-    @SuppressWarnings("deprecation")
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        spawnAsEntity(worldIn, pos, new ItemStack(fruitItem.get(), 1));
-        worldIn.playSound(null, pos, SoundEvents.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
-        worldIn.setBlockState(pos, leavesBlock.getDefaultState().with(LeavesBlock.PERSISTENT, state.get(LeavesBlock.PERSISTENT)).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)), 2);
-        return ActionResultType.func_233537_a_(worldIn.isRemote);
+    @Override
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+        popResource(level, blockPos, new ItemStack(fruitItem.get(), 1));
+        level.playSound(null, blockPos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+        level.setBlock(blockPos, leavesBlock.defaultBlockState().setValue(LeavesBlock.PERSISTENT, blockState.getValue(LeavesBlock.PERSISTENT)).setValue(LeavesBlock.DISTANCE, blockState.getValue(LeavesBlock.DISTANCE)), 2);
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
-    public boolean ticksRandomly(BlockState state) {
+    public boolean isRandomlyTicking(BlockState blockState) {
         return true;
     }
 
@@ -48,44 +52,44 @@ public class FruitLeavesBlock extends AbnormalsLeavesBlock {
      * Performs a random tick on a block.
      */
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if (worldIn.getMoonFactor() <= 0.25 && !state.get(LeavesBlock.PERSISTENT)) {
-            spawnAsEntity(worldIn, pos, new ItemStack(fruitItem.get(), 1));
-            worldIn.setBlockState(pos, FruitfulBlocks.BUDDING_OAK_LEAVES.get().getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
+    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+        if (serverLevel.getMoonBrightness() <= 0.25 && !blockState.getValue(LeavesBlock.PERSISTENT)) {
+            popResource(serverLevel, blockPos, new ItemStack(fruitItem.get(), 1));
+            serverLevel.setBlockAndUpdate(blockPos, FruitfulBlocks.BUDDING_OAK_LEAVES.get().defaultBlockState().setValue(LeavesBlock.PERSISTENT, false).setValue(LeavesBlock.DISTANCE, blockState.getValue(LeavesBlock.DISTANCE)));
         }
-        super.randomTick(state, worldIn, pos, random);
+        super.randomTick(blockState, serverLevel, blockPos, random);
     }
 
-    private static BlockState updateDistance(BlockState state, IWorld worldIn, BlockPos pos) {
+    private static BlockState updateDistance(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos) {
         int i = 7;
-        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
         for(Direction direction : Direction.values()) {
-            blockpos$mutable.setAndMove(pos, direction);
-            i = Math.min(i, getDistance(worldIn.getBlockState(blockpos$mutable)) + 1);
+            mutableBlockPos.setWithOffset(blockPos, direction);
+            i = Math.min(i, getDistance(serverLevel.getBlockState(mutableBlockPos)) + 1);
             if (i == 1) {
                 break;
             }
         }
 
-        return state.with(DISTANCE, Integer.valueOf(i));
+        return blockState.setValue(DISTANCE, i);
     }
 
     private static int getDistance(BlockState neighbor) {
         if (BlockTags.LOGS.contains(neighbor.getBlock())) {
             return 0;
         } else {
-            return neighbor.getBlock() instanceof LeavesBlock || neighbor.getBlock() instanceof OakBlossomBlock ? neighbor.get(DISTANCE) : 7;
+            return neighbor.getBlock() instanceof LeavesBlock || neighbor.getBlock() instanceof OakBlossomBlock ? neighbor.getValue(DISTANCE) : 7;
         }
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return updateDistance(this.getDefaultState().with(PERSISTENT, Boolean.TRUE), context.getWorld(), context.getPos());
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        return updateDistance(this.defaultBlockState().setValue(PERSISTENT, Boolean.TRUE), (ServerLevel)blockPlaceContext.getLevel(), blockPlaceContext.getClickedPos());
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-        worldIn.setBlockState(pos, updateDistance(state, worldIn, pos), 3);
+    public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+        serverLevel.setBlockAndUpdate(blockPos, updateDistance(blockState, serverLevel, blockPos));
     }
 }

@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+/**
+ * @author Exoplanetary, Sarinsa, Steven
+ */
 @Mixin(Bee.BeePollinateGoal.class)
 public abstract class BeeEntityPollinateGoal {
     @Shadow

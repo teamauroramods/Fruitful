@@ -4,6 +4,7 @@ import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
 import com.teamaurora.fruitful.core.registry.FruitfulItems;
 import gg.moonflower.pollen.api.config.ConfigManager;
 import gg.moonflower.pollen.api.config.PollinatedConfigType;
+import gg.moonflower.pollen.api.event.events.entity.ModifyTradesEvents;
 import gg.moonflower.pollen.api.platform.Platform;
 import gg.moonflower.pollen.api.registry.client.ColorRegistry;
 import gg.moonflower.pollen.api.registry.client.RenderTypeRegistry;
@@ -19,9 +20,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.FireBlock;
 
+//TODO: Events
 public class Fruitful {
-    //TODO: events
-
     public static final String MOD_ID = "fruitful";
     public static final FruitfulCommonConfig CONFIG = ConfigManager.register(MOD_ID, PollinatedConfigType.COMMON, FruitfulCommonConfig::new);
     public static final Platform PLATFORM = Platform.builder(MOD_ID)
@@ -80,10 +80,14 @@ public class Fruitful {
     public static void onCommonInit() {
         FruitfulBlocks.BLOCKS.register(Fruitful.PLATFORM);
         FruitfulItems.ITEMS.register(Fruitful.PLATFORM);
+
+        ModifyTradesEvents.WANDERER.register((event) -> event.getGeneric().add(FruitfulBlocks.FLOWERING_OAK_SAPLING, 5, 1, 8, 1, 0.15F, true));
     }
 
     public static void onCommonPostInit(Platform.ModSetupContext ctx) {
         ctx.enqueueWork(() -> {
+
+            /* Compostables */
             ComposterBlock.add(0.95f, FruitfulBlocks.APPLE_OAK_LEAVES.get());
             ComposterBlock.add(0.3f, FruitfulBlocks.FLOWERING_OAK_LEAVES.get());
             ComposterBlock.add(0.3f, FruitfulBlocks.BUDDING_OAK_LEAVES.get());
@@ -96,7 +100,9 @@ public class Fruitful {
 
             ComposterBlock.add(0.3f, FruitfulBlocks.FLOWERING_OAK_SAPLING.get());
 
+            /* Flammables */
             FireBlock fireBlock = (FireBlock) Blocks.FIRE;
+
             fireBlock.setFlammable(FruitfulBlocks.APPLE_OAK_LEAVES.get(), 30, 60);
             fireBlock.setFlammable(FruitfulBlocks.FLOWERING_OAK_LEAVES.get(), 30, 60);
             fireBlock.setFlammable(FruitfulBlocks.BUDDING_OAK_LEAVES.get(), 30, 60);

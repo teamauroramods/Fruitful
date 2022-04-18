@@ -2,8 +2,6 @@ package com.teamaurora.fruitful.common.block;
 
 import com.minecraftabnormals.abnormals_core.core.util.item.filling.TargetedItemGroupFiller;
 import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.item.BlockItemUseContext;
@@ -11,7 +9,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -24,6 +21,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,9 +30,9 @@ import net.minecraftforge.common.IForgeShearable;
 
 import java.util.Random;
 
-// This class was originally nice but now it's a mess of duplicated code lol
-// Blame More Waterlogging
-// Credit to Team Abnormals for the fillItemGroup code
+/**
+ * @author Exoplanetary, Steven
+ */
 public class OakBlossomBlock extends Block implements IForgeShearable {
     public static final IntegerProperty DISTANCE = BlockStateProperties.DISTANCE_1_7;
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
@@ -43,7 +41,7 @@ public class OakBlossomBlock extends Block implements IForgeShearable {
         return Items.DARK_OAK_LEAVES;
     });
 
-    public OakBlossomBlock(AbstractBlock.Properties properties) {
+    public OakBlossomBlock(Properties properties) {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, false).with(POLLINATED, false));
     }
@@ -114,7 +112,7 @@ public class OakBlossomBlock extends Block implements IForgeShearable {
             }
         }
 
-        return state.with(DISTANCE, Integer.valueOf(i));
+        return state.with(DISTANCE, i);
     }
 
     private static int getDistance(BlockState neighbor) {
@@ -141,7 +139,7 @@ public class OakBlossomBlock extends Block implements IForgeShearable {
         }
     }
 
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        FILLER.fillItem(this.asItem(), group, items);
-    }
+//    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+//        FILLER.fillItem(this.asItem(), group, items);
+//    }
 }

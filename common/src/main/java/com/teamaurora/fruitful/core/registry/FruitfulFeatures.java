@@ -2,9 +2,10 @@ package com.teamaurora.fruitful.core.registry;
 
 import com.google.common.collect.ImmutableList;
 import com.teamaurora.fruitful.core.Fruitful;
-import com.teamaurora.fruitful.core.FruitfulCommonConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
@@ -86,9 +87,9 @@ public class FruitfulFeatures {
     }
 
     public static final class BlockStates {
-        public static final BlockState OAK_LOG = Blocks.OAK_LOG.getDefaultState();
-        public static final BlockState FLOWERING_OAK_LEAVES = FruitfulBlocks.FLOWERING_OAK_LEAVES.get().getDefaultState();
-        public static final BlockState BUDDING_OAK_LEAVES = FruitfulBlocks.BUDDING_OAK_LEAVES.get().getDefaultState();
+        public static final BlockState OAK_LOG = Blocks.OAK_LOG.defaultBlockState();
+        public static final BlockState FLOWERING_OAK_LEAVES = FruitfulBlocks.FLOWERING_OAK_LEAVES.get().defaultBlockState();
+        public static final BlockState BUDDING_OAK_LEAVES = FruitfulBlocks.BUDDING_OAK_LEAVES.get().defaultBlockState();
     }
 
     public static final class Configs {

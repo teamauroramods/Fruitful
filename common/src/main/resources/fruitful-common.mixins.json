@@ -7,7 +7,8 @@
   ],
   "mixins": [
     "BeeEntityFindPollinationTargetGoalMixin",
-    "BeeEntityPollinateGoal"
+    "BeeEntityPollinateGoal",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

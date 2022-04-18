@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("unused")
 public class FruitfulItems {
     public static final PollinatedRegistry<Item> ITEMS = PollinatedRegistry.create(Registry.ITEM, Fruitful.MOD_ID);
 
