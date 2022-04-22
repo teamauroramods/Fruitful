@@ -1,140 +1,144 @@
 package com.teamaurora.fruitful.common.block;
 
 import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.entity.Shearable;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.ticks.ScheduledTick;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 /**
  * @author Exoplanetary, Steven
  */
-public class OakBlossomBlock extends Block implements Shearable {
-    public static final IntegerProperty DISTANCE = BlockStateProperties.DISTANCE_1_7;
+@SuppressWarnings("deprecation")
+public class OakBlossomBlock extends Block {
+    public static final IntegerProperty DISTANCE = BlockStateProperties.DISTANCE;
     public static final BooleanProperty PERSISTENT = BlockStateProperties.PERSISTENT;
     public static final BooleanProperty POLLINATED = BooleanProperty.create("pollinated");
-//    private static final TargetedItemGroupFiller FILLER = new TargetedItemGroupFiller(() -> {
-//        return Items.DARK_OAK_LEAVES;
-//    });
 
     public OakBlossomBlock(Properties properties) {
         super(properties);
-        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, false).with(POLLINATED, false));
-    }
-
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader reader, BlockPos pos) {
-        return VoxelShapes.empty();
+        this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, false).setValue(POLLINATED, false));
     }
 
     @Override
-    public boolean ticksRandomly(BlockState state) {
-        return !state.get(LeavesBlock.PERSISTENT);
+    public VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+        return Shapes.empty();
+    }
+
+    @Override
+    public boolean isRandomlyTicking(BlockState blockState) {
+        return !blockState.getValue(LeavesBlock.PERSISTENT);
     }
 
     /**
      * Performs a random tick on a block.
      */
+
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
-        if (worldIn.getMoonFactor() <= 0.75 && !state.get(LeavesBlock.PERSISTENT)) {
-            if (state.get(POLLINATED)) {
-                worldIn.setBlockState(pos, FruitfulBlocks.APPLE_OAK_LEAVES.get().getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
+    public void randomTick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+        if (serverLevel.getMoonBrightness() <= 0.75 && !blockState.getValue(LeavesBlock.PERSISTENT)) {
+            if (blockState.getValue(POLLINATED)) {
+                serverLevel.setBlockAndUpdate(blockPos, FruitfulBlocks.APPLE_OAK_LEAVES.get().defaultBlockState().setValue(LeavesBlock.PERSISTENT, false).setValue(LeavesBlock.DISTANCE, blockState.getValue(LeavesBlock.DISTANCE)));
             } else {
-                worldIn.setBlockState(pos, FruitfulBlocks.BUDDING_OAK_LEAVES.get().getDefaultState().with(LeavesBlock.PERSISTENT, false).with(LeavesBlock.DISTANCE, state.get(LeavesBlock.DISTANCE)));
+                serverLevel.setBlockAndUpdate(blockPos, FruitfulBlocks.BUDDING_OAK_LEAVES.get().defaultBlockState().setValue(LeavesBlock.PERSISTENT, false).setValue(LeavesBlock.DISTANCE, blockState.getValue(LeavesBlock.DISTANCE)));
             }
         }
 
-        if (!state.get(PERSISTENT) && state.get(DISTANCE) == 7) {
-            spawnDrops(state, worldIn, pos);
-            worldIn.removeBlock(pos, false);
+        if (!blockState.getValue(PERSISTENT) && blockState.getValue(DISTANCE) == 7) {
+            dropResources(blockState, serverLevel, blockPos);
+            serverLevel.removeBlock(blockPos, false);
         }
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(DISTANCE, PERSISTENT, POLLINATED);
     }
 
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return updateDistance(this.getDefaultState().with(PERSISTENT, Boolean.TRUE), context.getWorld(), context.getPos());
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        return updateDistance(this.defaultBlockState().setValue(PERSISTENT, Boolean.TRUE), blockPlaceContext.getLevel(), blockPlaceContext.getClickedPos());
     }
 
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand) {
-        worldIn.setBlockState(pos, updateDistance(state, worldIn, pos), 3);
+    @Override
+    public void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, Random random) {
+        serverLevel.setBlock(blockPos, updateDistance(blockState, serverLevel, blockPos), 3);
     }
 
-    public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos) {
+    @Override
+    public int getLightBlock(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
         return 1;
     }
 
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-        int i = getDistance(facingState) + 1;
-        if (i != 1 || stateIn.get(DISTANCE) != i) {
-            worldIn.getPendingBlockTicks().scheduleTick(currentPos, this, 1);
+    @Override
+    public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
+        int i = getDistance(blockState2) + 1;
+        if (i != 1 || blockState.getValue(DISTANCE) != i) {
+            levelAccessor.getBlockTicks().schedule(ScheduledTick.probe(this, blockPos));
         }
 
-        return stateIn;
+        return blockState;
     }
 
-    private static BlockState updateDistance(BlockState state, IWorld worldIn, BlockPos pos) {
+    private static BlockState updateDistance(BlockState blockState, Level level, BlockPos blockPos) {
         int i = 7;
-        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
         for(Direction direction : Direction.values()) {
-            blockpos$mutable.setAndMove(pos, direction);
-            i = Math.min(i, getDistance(worldIn.getBlockState(blockpos$mutable)) + 1);
+            mutableBlockPos.setWithOffset(blockPos, direction);
+            i = Math.min(i, getDistance(level.getBlockState(mutableBlockPos)) + 1);
             if (i == 1) {
                 break;
             }
         }
 
-        return state.with(DISTANCE, i);
+        return blockState.setValue(DISTANCE, i);
     }
 
     private static int getDistance(BlockState neighbor) {
         if (BlockTags.LOGS.contains(neighbor.getBlock())) {
             return 0;
         } else {
-            return neighbor.getBlock() instanceof LeavesBlock || neighbor.getBlock() instanceof OakBlossomBlock ? neighbor.get(DISTANCE) : 7;
+            return neighbor.getBlock() instanceof LeavesBlock || neighbor.getBlock() instanceof OakBlossomBlock ? neighbor.getValue(DISTANCE) : 7;
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (worldIn.isRainingAt(pos.up())) {
-            if (rand.nextInt(15) == 1) {
-                BlockPos blockpos = pos.down();
-                BlockState blockstate = worldIn.getBlockState(blockpos);
-                if (!blockstate.isSolid() || !blockstate.isSolidSide(worldIn, blockpos, Direction.UP)) {
-                    double d0 = (double)pos.getX() + rand.nextDouble();
-                    double d1 = (double)pos.getY() - 0.05D;
-                    double d2 = (double)pos.getZ() + rand.nextDouble();
-                    worldIn.addParticle(ParticleTypes.DRIPPING_WATER, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
+        if (level.isRainingAt(blockPos.above())) {
+            if (random.nextInt(15) == 1) {
+                BlockPos blockpos = blockPos.below();
+                BlockState blockstate = level.getBlockState(blockpos);
+                if (!blockstate.canOcclude() || !blockstate.isFaceSturdy(level, blockpos, Direction.UP)) {
+                    double d0 = (double)blockPos.getX() + random.nextDouble();
+                    double d1 = (double)blockPos.getY() - 0.05D;
+                    double d2 = (double)blockPos.getZ() + random.nextDouble();
+                    level.addParticle(ParticleTypes.DRIPPING_WATER, d0, d1, d2, 0.0D, 0.0D, 0.0D);
                 }
             }
         }
     }
-
-//    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-//        FILLER.fillItem(this.asItem(), group, items);
-//    }
 }

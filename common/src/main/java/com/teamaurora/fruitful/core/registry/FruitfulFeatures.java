@@ -2,89 +2,45 @@ package com.teamaurora.fruitful.core.registry;
 
 import com.google.common.collect.ImmutableList;
 import com.teamaurora.fruitful.core.Fruitful;
+import gg.moonflower.pollen.api.registry.PollinatedRegistry;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.data.worldgen.placement.TreePlacements;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.stateproviders.SimpleStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
+import net.minecraft.world.level.levelgen.feature.treedecorators.BeehiveDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+
+import java.util.List;
+import java.util.OptionalInt;
+import java.util.function.Supplier;
 
 public class FruitfulFeatures {
-    private static boolean isOak(BaseTreeFeatureConfig config) {
-        if (config.trunkProvider instanceof SimpleBlockStateProvider) {
-            if (((SimpleBlockStateProvider)config.trunkProvider).getBlockState(new Random(), new BlockPos(0, 0, 0)).getBlock() == Blocks.OAK_LOG) {
-                return config.foliagePlacer instanceof BlobFoliagePlacer;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
+    public static final PollinatedRegistry<Feature<?>> FEATURES = PollinatedRegistry.create(Registry.FEATURE, Fruitful.MOD_ID);
+    public static final PollinatedRegistry<TreeDecoratorType<?>> TREE_DECORATOR_TYPES = PollinatedRegistry.create(Registry.TREE_DECORATOR_TYPES, Fruitful.MOD_ID);
+    public static final PollinatedRegistry<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES = PollinatedRegistry.create(BuiltinRegistries.CONFIGURED_FEATURE, Fruitful.MOD_ID);
+    public static final PollinatedRegistry<PlacedFeature> PLACED_FEATURES = PollinatedRegistry.create(BuiltinRegistries.PLACED_FEATURE, Fruitful.MOD_ID);
 
-    private static boolean isFancyOak(BaseTreeFeatureConfig config) {
-        if (config.trunkProvider instanceof SimpleBlockStateProvider) {
-            if (((SimpleBlockStateProvider)config.trunkProvider).getBlockState(new Random(), new BlockPos(0, 0, 0)).getBlock() == Blocks.OAK_LOG) {
-                return config.foliagePlacer instanceof FancyFoliagePlacer;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    @SubscribeEvent
-    public static void onBiomeLoad(BiomeLoadingEvent event) {
-        ResourceLocation biomeName = event.getName();
-
-        if (biomeName == null) return;
-
-        if (Fruitful.CONFIG.flowerBiomes.get().contains(biomeName.toString())) {
-            event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.FLOWERING_OAK_INFREQUENT);
-        }
-
-        if (DataUtil.matchesKeys(biomeName, Biomes.FLOWER_FOREST)) {
-            List<Supplier<ConfiguredFeature<?, ?>>> features = event.getGeneration().getFeatures(GenerationStage.Decoration.VEGETAL_DECORATION);
-            if (event.getName() != null) {
-                List<Supplier<ConfiguredFeature<?, ?>>> toRemove = new ArrayList<>();
-                for (Supplier<ConfiguredFeature<?, ?>> configuredFeatureSupplier : features) {
-                    IFeatureConfig config = configuredFeatureSupplier.get().config;
-                    if (config instanceof DecoratedFeatureConfig) {
-                        IFeatureConfig config1 = ((DecoratedFeatureConfig) config).feature.get().config;
-                        if (config1 instanceof DecoratedFeatureConfig) {
-                            if (((DecoratedFeatureConfig) config1).feature.get().config instanceof MultipleRandomFeatureConfig) {
-                                MultipleRandomFeatureConfig mrfconfig = (MultipleRandomFeatureConfig) ((DecoratedFeatureConfig) config1).feature.get().config;
-
-                                boolean remove = false;
-
-                                if (isFancyOak((BaseTreeFeatureConfig) mrfconfig.defaultFeature.get().config)) {
-                                    remove = true;
-                                } else if (isOak((BaseTreeFeatureConfig) mrfconfig.defaultFeature.get().config)) {
-                                    remove = true;
-                                }
-
-                                for (ConfiguredRandomFeatureList crfl : mrfconfig.features) {
-                                    if (isFancyOak((BaseTreeFeatureConfig) crfl.feature.get().config)) {
-                                        remove = true;
-                                    } else if (isOak((BaseTreeFeatureConfig) crfl.feature.get().config)) {
-                                        remove = true;
-                                    }
-                                }
-
-                                if (remove) {
-                                    toRemove.add(configuredFeatureSupplier);
-                                }
-                            }
-                        }
-                    }
-                }
-                toRemove.forEach(features::remove);
-                event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Configured.FOREST_FLOWER_TREES);
-            }
-        }
-    }
+    /* Beehives */
+    public static final BeehiveDecorator FRUITFUL_BEEHIVE_0002 = new BeehiveDecorator(0.002F);
+    public static final BeehiveDecorator FRUITFUL_BEEHIVE_005 = new BeehiveDecorator(0.05F);
 
     public static final class BlockStates {
         public static final BlockState OAK_LOG = Blocks.OAK_LOG.defaultBlockState();
@@ -93,47 +49,74 @@ public class FruitfulFeatures {
     }
 
     public static final class Configs {
-        public static final BaseTreeFeatureConfig FLOWERING_OAK = (new BaseTreeFeatureConfig.Builder(
-                new SimpleBlockStateProvider(BlockStates.OAK_LOG),
-                new WeightedBlockStateProvider().addWeightedBlockstate(BlockStates.BUDDING_OAK_LEAVES, 2).addWeightedBlockstate(BlockStates.FLOWERING_OAK_LEAVES, 1),
-                new BlobFoliagePlacer(FeatureSpread.func_242252_a(2), FeatureSpread.func_242252_a(0), 3),
+        public static final TreeConfiguration FLOWERING_OAK = (new TreeConfiguration.TreeConfigurationBuilder(
+                new SimpleStateProvider(BlockStates.OAK_LOG),
                 new StraightTrunkPlacer(4, 2, 0),
-                new TwoLayerFeature(1, 0, 1))
-        ).setIgnoreVines().build();
-        public static final BaseTreeFeatureConfig FLOWERING_FANCY_OAK = (new BaseTreeFeatureConfig.Builder(
-                new SimpleBlockStateProvider(BlockStates.OAK_LOG),
-                new WeightedBlockStateProvider().addWeightedBlockstate(BlockStates.BUDDING_OAK_LEAVES, 2).addWeightedBlockstate(BlockStates.FLOWERING_OAK_LEAVES, 1),
-                new FancyFoliagePlacer(FeatureSpread.func_242252_a(2),
-                        FeatureSpread.func_242252_a(4), 4), new FancyTrunkPlacer(3, 11, 0),
-                new TwoLayerFeature(0, 0, 0, OptionalInt.of(4)))
-        ).setIgnoreVines().func_236702_a_(Heightmap.Type.MOTION_BLOCKING).build();
+                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1).build()),
+                new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 0),
+                new TwoLayersFeatureSize(1, 0, 1)
+        )).ignoreVines().build();
+        public static final TreeConfiguration FLOWERING_FANCY_OAK = (new TreeConfiguration.TreeConfigurationBuilder(
+                new SimpleStateProvider(BlockStates.OAK_LOG),
+                new FancyTrunkPlacer(3, 11, 0),
+                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1).build()),
+                new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+                new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
+        )).ignoreVines().build();
+        public static final TreeConfiguration FLOWERING_OAK_BEEHIVE_005_CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(
+                new SimpleStateProvider(BlockStates.OAK_LOG),
+                new StraightTrunkPlacer(4, 2, 0),
+                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1).build()),
+                new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 0),
+                new TwoLayersFeatureSize(1, 0, 1)
+        )).ignoreVines().decorators(ImmutableList.of(FRUITFUL_BEEHIVE_005)).build();
+        public static final TreeConfiguration FLOWERING_OAK_BEEHIVE_0002_CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(
+                new SimpleStateProvider(BlockStates.OAK_LOG),
+                new StraightTrunkPlacer(4, 2, 0),
+                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1).build()),
+                new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 0),
+                new TwoLayersFeatureSize(1, 0, 1)
+        )).ignoreVines().decorators(ImmutableList.of(FRUITFUL_BEEHIVE_0002)).build();
+        public static final TreeConfiguration FLOWERING_FANCY_OAK_BEEHIVE_005_CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(
+                new SimpleStateProvider(BlockStates.OAK_LOG),
+                new FancyTrunkPlacer(3, 11, 0),
+                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1).build()),
+                new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+                new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
+        )).ignoreVines().decorators(ImmutableList.of(FRUITFUL_BEEHIVE_005)).build();
+        public static final TreeConfiguration FLOWERING_FANCY_OAK_BEEHIVE_0002_CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(
+                new SimpleStateProvider(BlockStates.OAK_LOG),
+                new FancyTrunkPlacer(3, 11, 0),
+                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1).build()),
+                new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+                new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
+        )).ignoreVines().decorators(ImmutableList.of(FRUITFUL_BEEHIVE_0002)).build();
     }
 
     public static final class Configured {
-        public static final ConfiguredFeature<TreeConfiguration, ?> FLOWERING_OAK = Feature.TREE.configured(Configs.FLOWERING_OAK);
-        public static final ConfiguredFeature<TreeConfiguration, ?> FLOWERING_FANCY_OAK = Feature.TREE.configured(Configs.FLOWERING_FANCY_OAK);
-        public static final ConfiguredFeature<TreeConfiguration, ?> FLOWERING_OAK_BEES_005 = Feature.TREE.configured(Configs.FLOWERING_OAK.func_236685_a_(ImmutableList.of(Features.Placements.BEES_005_PLACEMENT)));
-        public static final ConfiguredFeature<TreeConfiguration, ?> FLOWERING_FANCY_OAK_BEES_005 = Feature.TREE.configured(Configs.FLOWERING_FANCY_OAK.func_236685_a_(ImmutableList.of(Features.Placements.BEES_005_PLACEMENT)));
-        public static final ConfiguredFeature<TreeConfiguration, ?> FLOWERING_OAK_BEES_002 = Feature.TREE.configured(Configs.FLOWERING_OAK.func_236685_a_(ImmutableList.of(Features.Placements.BEES_002_PLACEMENT)));
-        public static final ConfiguredFeature<TreeConfiguration, ?> FLOWERING_FANCY_OAK_BEES_002 = Feature.TREE.configured(Configs.FLOWERING_FANCY_OAK.func_236685_a_(ImmutableList.of(Features.Placements.BEES_002_PLACEMENT)));
+        public static final Supplier<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK = () -> Feature.TREE.configured(Configs.FLOWERING_OAK);
+        public static final Supplier<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK = () -> Feature.TREE.configured(Configs.FLOWERING_FANCY_OAK);
+        public static final Supplier<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK_BEES_005 = () -> Feature.TREE.configured(Configs.FLOWERING_OAK_BEEHIVE_005_CONFIG);
+        public static final Supplier<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK_BEES_005 = () -> Feature.TREE.configured(Configs.FLOWERING_FANCY_OAK_BEEHIVE_005_CONFIG);
+        public static final Supplier<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK_BEES_002 = () -> Feature.TREE.configured(Configs.FLOWERING_OAK_BEEHIVE_0002_CONFIG);
+        public static final Supplier<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK_BEES_002 = () -> Feature.TREE.configured(Configs.FLOWERING_FANCY_OAK_BEEHIVE_0002_CONFIG);
 
-        public static final ConfiguredFeature<?, ?> FLOWERING_OAK_INFREQUENT = FLOWERING_OAK.withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(0, 0.12F, 3)));
-        public static final ConfiguredFeature<?, ?> FOREST_FLOWER_TREES = Feature.RANDOM_SELECTOR.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.BIRCH_BEES_002.withChance(0.2F), FLOWERING_FANCY_OAK_BEES_002.withChance(0.05F), Features.FANCY_OAK_BEES_002.withChance(0.053F), Features.OAK_BEES_002.withChance(0.5F)), FLOWERING_OAK_BEES_002)).withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT).withPlacement(Placement.COUNT_EXTRA.configure(new AtSurfaceWithExtraConfig(6, 0.1F, 1)));
+        public static final Supplier<PlacedFeature> FLOWERING_OAK_INFREQUENT = () -> FLOWERING_OAK.get().placed(VegetationPlacements.treePlacement(PlacementUtils.countExtra(0, 0.12F, 3)));
+        public static final Supplier<ConfiguredFeature<?, ?>> TREES_FLOWER_FOREST = () -> Feature.RANDOM_SELECTOR.configured(new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(TreePlacements.BIRCH_BEES_002, 0.2F), new WeightedPlacedFeature(FLOWERING_FANCY_OAK_BEES_002.get().filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get()), 0.05F), new WeightedPlacedFeature(TreePlacements.BIRCH_BEES_002, 0.053F), new WeightedPlacedFeature(TreePlacements.BIRCH_BEES_002, 0.5F)), FLOWERING_OAK_BEES_002.get().filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
+        public static final Supplier<PlacedFeature> TREES_FLOWER_FOREST_PLACED = () -> TREES_FLOWER_FOREST.get().placed(VegetationPlacements.treePlacement(PlacementUtils.countExtra(6, 0.1F, 1)));
 
-        private static <FC extends IFeatureConfig> void register(String name, ConfiguredFeature<FC, ?> configuredFeature) {
-            Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(Fruitful.MOD_ID, name), configuredFeature);
-        }
 
         public static void registerConfiguredFeatures() {
-            register("flowering_oak", FLOWERING_OAK);
-            register("flowering_fancy_oak", FLOWERING_FANCY_OAK);
-            register("flowering_oak_bees_005", FLOWERING_OAK_BEES_005);
-            register("flowering_fancy_oak_bees_005", FLOWERING_FANCY_OAK_BEES_005);
-            register("flowering_oak_bees_002", FLOWERING_OAK_BEES_002);
-            register("flowering_fancy_oak_bees_002", FLOWERING_FANCY_OAK_BEES_002);
+            CONFIGURED_FEATURES.register("flowering_oak", FLOWERING_OAK);
+            CONFIGURED_FEATURES.register("flowering_fancy_oak", FLOWERING_FANCY_OAK);
+            CONFIGURED_FEATURES.register("flowering_oak_bees_005", FLOWERING_OAK_BEES_005);
+            CONFIGURED_FEATURES.register("flowering_fancy_oak_bees_005", FLOWERING_FANCY_OAK_BEES_005);
+            CONFIGURED_FEATURES.register("flowering_oak_bees_002", FLOWERING_OAK_BEES_002);
+            CONFIGURED_FEATURES.register("flowering_fancy_oak_bees_002", FLOWERING_FANCY_OAK_BEES_002);
 
-            register("flowering_oak_infrequent", FLOWERING_OAK_INFREQUENT);
-            register("forest_flower_trees", FOREST_FLOWER_TREES);
+//            PLACED_FEATURES.register("flowering_oak_infrequent", FLOWERING_OAK_INFREQUENT);
+            CONFIGURED_FEATURES.register("trees_flower_forest", TREES_FLOWER_FOREST);
+            PLACED_FEATURES.register("trees_flower_forest", TREES_FLOWER_FOREST_PLACED);
         }
     }
 }

@@ -35,6 +35,7 @@ public class FruitLeavesBlock extends LeavesBlock {
         fruitItem = fruit;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         popResource(level, blockPos, new ItemStack(fruitItem.get(), 1));

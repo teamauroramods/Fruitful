@@ -1,6 +1,7 @@
 package com.teamaurora.fruitful.core;
 
 import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
+import com.teamaurora.fruitful.core.registry.FruitfulFeatures;
 import com.teamaurora.fruitful.core.registry.FruitfulItems;
 import gg.moonflower.pollen.api.config.ConfigManager;
 import gg.moonflower.pollen.api.config.PollinatedConfigType;
@@ -62,7 +63,6 @@ public class Fruitful {
                     FruitfulBlocks.APPLE_OAK_LEAF_CARPET
             );
 
-
             ItemColor itemLeafColor = (stack, tint) -> blockColors.getColor(((BlockItem) stack.getItem()).getBlock().defaultBlockState(), null, null, 0);
             ColorRegistry.register(itemLeafColor,
                     FruitfulBlocks.BUDDING_OAK_LEAVES,
@@ -80,6 +80,10 @@ public class Fruitful {
     public static void onCommonInit() {
         FruitfulBlocks.BLOCKS.register(Fruitful.PLATFORM);
         FruitfulItems.ITEMS.register(Fruitful.PLATFORM);
+        FruitfulFeatures.FEATURES.register(Fruitful.PLATFORM);
+        FruitfulFeatures.CONFIGURED_FEATURES.register(Fruitful.PLATFORM);
+        FruitfulFeatures.TREE_DECORATOR_TYPES.register(Fruitful.PLATFORM);
+        FruitfulFeatures.PLACED_FEATURES.register(Fruitful.PLATFORM);
 
         ModifyTradesEvents.WANDERER.register((event) -> event.getGeneric().add(FruitfulBlocks.FLOWERING_OAK_SAPLING, 5, 1, 8, 1, 0.15F, true));
     }
@@ -112,6 +116,9 @@ public class Fruitful {
             fireBlock.setFlammable(FruitfulBlocks.FLOWERING_OAK_LEAF_CARPET.get(), 30, 60);
             fireBlock.setFlammable(FruitfulBlocks.BUDDING_OAK_LEAF_CARPET.get(), 30, 60);
             fireBlock.setFlammable(FruitfulBlocks.BLOSSOMING_OAK_LEAF_CARPET.get(), 30, 60);
+
+            /* Misc Registry */
+            FruitfulFeatures.Configured.registerConfiguredFeatures();
         });
     }
 }

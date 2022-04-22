@@ -15,9 +15,9 @@ public class FloweringOakTree extends AbstractTreeGrower {
     @Override
     protected ConfiguredFeature<?, ?> getConfiguredFeature(Random random, boolean largeHive) {
         if (random.nextInt(10) == 0) {
-            return largeHive ? FruitfulFeatures.Configured.FLOWERING_FANCY_OAK_BEES_005 : FruitfulFeatures.Configured.FLOWERING_FANCY_OAK;
+            return largeHive ? FruitfulFeatures.Configured.FLOWERING_FANCY_OAK_BEES_005.get() : FruitfulFeatures.Configured.FLOWERING_FANCY_OAK.get();
         } else {
-            return largeHive ? FruitfulFeatures.Configured.FLOWERING_OAK_BEES_005 : FruitfulFeatures.Configured.FLOWERING_OAK;
+            return largeHive ? FruitfulFeatures.Configured.FLOWERING_OAK_BEES_005.get() : FruitfulFeatures.Configured.FLOWERING_OAK.get();
         }
     }
 }

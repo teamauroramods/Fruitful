@@ -7,3 +7,4 @@ accessible method net/minecraft/world/level/block/SaplingBlock <init> (Lnet/mine
 accessible method net/minecraft/world/level/block/FireBlock setFlammable (Lnet/minecraft/world/level/block/Block;II)V
 accessible method net/minecraft/world/level/block/ComposterBlock add (FLnet/minecraft/world/level/ItemLike;)V
 accessible method net/minecraft/world/entity/animal/Bee incrementNumCropsGrownSincePollination ()V
+accessible method net/minecraft/world/level/levelgen/feature/stateproviders/SimpleStateProvider <init> (Lnet/minecraft/world/level/block/state/BlockState;)V
