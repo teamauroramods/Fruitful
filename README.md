@@ -1,7 +1,6 @@
 <p align="center"><img src="https://raw.githubusercontent.com/teamauroramods/Fruitful/1.18.x/forge/src/main/resources/logo.png" width=60%></p>
 <h3 align="center">Fruitful</h3>
 
-<p align="center">Fruitful aims to make the fruits of Minecraft less frustrating to farm, and also adds some new foods related to them!</p>
 <p align="center">
   1.18 and above requires Pollen
 </p>
