@@ -28,6 +28,26 @@ public class Fruitful {
             .build();
 
     public static void onClientInit() {
+        ColorRegistry.register((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getDefaultColor(),
+                FruitfulBlocks.BUDDING_OAK_LEAVES,
+                FruitfulBlocks.FLOWERING_OAK_LEAVES,
+                FruitfulBlocks.BLOSSOMING_OAK_LEAVES,
+                FruitfulBlocks.APPLE_OAK_LEAVES,
+                FruitfulBlocks.BUDDING_OAK_LEAF_CARPET,
+                FruitfulBlocks.FLOWERING_OAK_LEAF_CARPET,
+                FruitfulBlocks.BLOSSOMING_OAK_LEAF_CARPET,
+                FruitfulBlocks.APPLE_OAK_LEAF_CARPET
+        );
+        ColorRegistry.register((stack, tintIndex) -> FoliageColor.getDefaultColor(),
+                FruitfulBlocks.BUDDING_OAK_LEAVES,
+                FruitfulBlocks.FLOWERING_OAK_LEAVES,
+                FruitfulBlocks.BLOSSOMING_OAK_LEAVES,
+                FruitfulBlocks.APPLE_OAK_LEAVES,
+                FruitfulBlocks.BUDDING_OAK_LEAF_CARPET,
+                FruitfulBlocks.FLOWERING_OAK_LEAF_CARPET,
+                FruitfulBlocks.BLOSSOMING_OAK_LEAF_CARPET,
+                FruitfulBlocks.APPLE_OAK_LEAF_CARPET
+        );
     }
 
     public static void onClientPostInit(Platform.ModSetupContext ctx) {
@@ -44,27 +64,6 @@ public class Fruitful {
 
             RenderTypeRegistry.register(FruitfulBlocks.FLOWERING_OAK_SAPLING.get(), RenderType.cutoutMipped());
             RenderTypeRegistry.register(FruitfulBlocks.POTTED_FLOWERING_OAK_SAPLING.get(), RenderType.cutoutMipped());
-
-            ColorRegistry.register((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getDefaultColor(),
-                    FruitfulBlocks.BUDDING_OAK_LEAVES,
-                    FruitfulBlocks.FLOWERING_OAK_LEAVES,
-                    FruitfulBlocks.BLOSSOMING_OAK_LEAVES,
-                    FruitfulBlocks.APPLE_OAK_LEAVES,
-                    FruitfulBlocks.BUDDING_OAK_LEAF_CARPET,
-                    FruitfulBlocks.FLOWERING_OAK_LEAF_CARPET,
-                    FruitfulBlocks.BLOSSOMING_OAK_LEAF_CARPET,
-                    FruitfulBlocks.APPLE_OAK_LEAF_CARPET
-            );
-            ColorRegistry.register((stack, tintIndex) -> FoliageColor.getDefaultColor(),
-                    FruitfulBlocks.BUDDING_OAK_LEAVES,
-                    FruitfulBlocks.FLOWERING_OAK_LEAVES,
-                    FruitfulBlocks.BLOSSOMING_OAK_LEAVES,
-                    FruitfulBlocks.APPLE_OAK_LEAVES,
-                    FruitfulBlocks.BUDDING_OAK_LEAF_CARPET,
-                    FruitfulBlocks.FLOWERING_OAK_LEAF_CARPET,
-                    FruitfulBlocks.BLOSSOMING_OAK_LEAF_CARPET,
-                    FruitfulBlocks.APPLE_OAK_LEAF_CARPET
-            );
         });
     }
 

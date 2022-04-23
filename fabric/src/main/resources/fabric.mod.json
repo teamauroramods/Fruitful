@@ -13,6 +13,7 @@
   "license": "GPLv3",
   "icon": "icon.png",
   "environment": "*",
+  "accessWidener" : "${id}.accesswidener",
   "mixins": [
     "${id}-common.mixins.json",
     "${id}.mixins.json"
