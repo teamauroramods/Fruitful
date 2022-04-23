@@ -6,6 +6,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -49,13 +51,13 @@ public class OakFlowerLeavesBlock extends LeavesBlock {
         serverLevel.setBlockAndUpdate(blockPos, updateDistance(blockState, serverLevel, blockPos));
     }
 
-    private static BlockState updateDistance(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos) {
+    private static BlockState updateDistance(BlockState blockState, LevelAccessor level, BlockPos blockPos) {
         int i = 7;
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
         for(Direction direction : Direction.values()) {
             mutableBlockPos.setWithOffset(blockPos, direction);
-            i = Math.min(i, getDistance(serverLevel.getBlockState(mutableBlockPos)) + 1);
+            i = Math.min(i, getDistance(level.getBlockState(mutableBlockPos)) + 1);
             if (i == 1) {
                 break;
             }
@@ -74,6 +76,6 @@ public class OakFlowerLeavesBlock extends LeavesBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return updateDistance(this.defaultBlockState().setValue(PERSISTENT, Boolean.TRUE), (ServerLevel)blockPlaceContext.getLevel(), blockPlaceContext.getClickedPos());
+        return updateDistance(this.defaultBlockState().setValue(PERSISTENT, Boolean.TRUE), blockPlaceContext.getLevel(), blockPlaceContext.getClickedPos());
     }
 }

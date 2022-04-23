@@ -9,13 +9,8 @@ import gg.moonflower.pollen.api.event.events.entity.ModifyTradesEvents;
 import gg.moonflower.pollen.api.platform.Platform;
 import gg.moonflower.pollen.api.registry.client.ColorRegistry;
 import gg.moonflower.pollen.api.registry.client.RenderTypeRegistry;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
@@ -50,9 +45,7 @@ public class Fruitful {
             RenderTypeRegistry.register(FruitfulBlocks.FLOWERING_OAK_SAPLING.get(), RenderType.cutoutMipped());
             RenderTypeRegistry.register(FruitfulBlocks.POTTED_FLOWERING_OAK_SAPLING.get(), RenderType.cutoutMipped());
 
-            BlockColors blockColors = Minecraft.getInstance().getBlockColors();
-            BlockColor leafColor = (x, world, pos, u) -> world != null && pos != null ? BiomeColors.getAverageFoliageColor(world, pos) : FoliageColor.getDefaultColor();
-            ColorRegistry.register(leafColor,
+            ColorRegistry.register((state, level, pos, tintIndex) -> level != null && pos != null ? BiomeColors.getAverageFoliageColor(level, pos) : FoliageColor.getDefaultColor(),
                     FruitfulBlocks.BUDDING_OAK_LEAVES,
                     FruitfulBlocks.FLOWERING_OAK_LEAVES,
                     FruitfulBlocks.BLOSSOMING_OAK_LEAVES,
@@ -62,9 +55,7 @@ public class Fruitful {
                     FruitfulBlocks.BLOSSOMING_OAK_LEAF_CARPET,
                     FruitfulBlocks.APPLE_OAK_LEAF_CARPET
             );
-
-            ItemColor itemLeafColor = (stack, tint) -> blockColors.getColor(((BlockItem) stack.getItem()).getBlock().defaultBlockState(), null, null, 0);
-            ColorRegistry.register(itemLeafColor,
+            ColorRegistry.register((stack, tintIndex) -> FoliageColor.getDefaultColor(),
                     FruitfulBlocks.BUDDING_OAK_LEAVES,
                     FruitfulBlocks.FLOWERING_OAK_LEAVES,
                     FruitfulBlocks.BLOSSOMING_OAK_LEAVES,

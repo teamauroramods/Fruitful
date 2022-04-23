@@ -102,7 +102,7 @@ public class OakBlossomBlock extends Block {
         return blockState;
     }
 
-    private static BlockState updateDistance(BlockState blockState, Level level, BlockPos blockPos) {
+    private static BlockState updateDistance(BlockState blockState, LevelAccessor level, BlockPos blockPos) {
         int i = 7;
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
