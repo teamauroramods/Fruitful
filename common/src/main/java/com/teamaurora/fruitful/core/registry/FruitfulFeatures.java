@@ -18,6 +18,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
@@ -31,6 +33,7 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorTy
 import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 
 import java.util.List;
 import java.util.OptionalInt;
@@ -61,27 +64,33 @@ public class FruitfulFeatures {
 
     public static final class Configured {
 
-        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK = FeatureUtils.register(loc("flowering_oak"), Feature.TREE, Configs.createFloweringOak().build());
-        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK_BEES_005 = FeatureUtils.register(loc("flowering_oak_bees_005"), Feature.TREE, Configs.createFloweringOak().decorators(List.of(FRUITFUL_BEEHIVE_005)).build());
-        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK_BEES_002 = FeatureUtils.register(loc("flowering_oak_bees_002"), Feature.TREE, Configs.createFloweringOak().decorators(List.of(FRUITFUL_BEEHIVE_0002)).build());
-        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK = FeatureUtils.register(loc("flowering_fancy_oak"), Feature.TREE, Configs.createFancyFloweringOak().build());
-        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK_BEES_005 = FeatureUtils.register(loc("flowering_fancy_oak_bees_005"), Feature.TREE, Configs.createFancyFloweringOak().decorators(List.of(FRUITFUL_BEEHIVE_005)).build());
-        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK_BEES_002 = FeatureUtils.register(loc("flowering_fancy_oak_bees_002"), Feature.TREE, Configs.createFancyFloweringOak().decorators(List.of(FRUITFUL_BEEHIVE_0002)).build());
+        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK = register("flowering_oak", Feature.TREE, Configs.createFloweringOak().build());
+        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK_BEES_005 = register("flowering_oak_bees_005", Feature.TREE, Configs.createFloweringOak().decorators(List.of(FRUITFUL_BEEHIVE_005)).build());
+        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_OAK_BEES_002 = register("flowering_oak_bees_002", Feature.TREE, Configs.createFloweringOak().decorators(List.of(FRUITFUL_BEEHIVE_0002)).build());
+        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK = register("flowering_fancy_oak", Feature.TREE, Configs.createFancyFloweringOak().build());
+        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK_BEES_005 = register("flowering_fancy_oak_bees_005", Feature.TREE, Configs.createFancyFloweringOak().decorators(List.of(FRUITFUL_BEEHIVE_005)).build());
+        public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> FLOWERING_FANCY_OAK_BEES_002 = register("flowering_fancy_oak_bees_002", Feature.TREE, Configs.createFancyFloweringOak().decorators(List.of(FRUITFUL_BEEHIVE_0002)).build());
 
-        public static final Holder<PlacedFeature> FLOWERING_OAK_CHECKED = PlacementUtils.register(loc("flowering_oak_checked"), FLOWERING_OAK, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
-        public static final Holder<PlacedFeature> FLOWERING_OAK_BEES_005_PLACED = PlacementUtils.register(loc("flowering_oak_bees_005"), FLOWERING_OAK_BEES_005, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
-        public static final Holder<PlacedFeature> FLOWERING_OAK_BEES_002_PLACED = PlacementUtils.register(loc("flowering_oak_bees_002"), FLOWERING_OAK_BEES_002, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
-        public static final Holder<PlacedFeature> FLOWERING_FANCY_OAK_CHECKED = PlacementUtils.register(loc("flowering_fancy_oak_checked"), FLOWERING_FANCY_OAK, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
-        public static final Holder<PlacedFeature> FLOWERING_FANCY_OAK_BEES_005_PLACED = PlacementUtils.register(loc("flowering_fancy_oak_bees_005"), FLOWERING_FANCY_OAK_BEES_005, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
-        public static final Holder<PlacedFeature> FLOWERING_FANCY_OAK_BEES_002_PLACED = PlacementUtils.register(loc("flowering_fancy_oak_bees_002"), FLOWERING_FANCY_OAK_BEES_002, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
+        public static final Holder<PlacedFeature> FLOWERING_OAK_CHECKED = registerPlaced("flowering_oak_checked", FLOWERING_OAK, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
+        public static final Holder<PlacedFeature> FLOWERING_OAK_BEES_005_PLACED = registerPlaced("flowering_oak_bees_005", FLOWERING_OAK_BEES_005, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
+        public static final Holder<PlacedFeature> FLOWERING_OAK_BEES_002_PLACED = registerPlaced("flowering_oak_bees_002", FLOWERING_OAK_BEES_002, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
+        public static final Holder<PlacedFeature> FLOWERING_FANCY_OAK_CHECKED = registerPlaced("flowering_fancy_oak_checked", FLOWERING_FANCY_OAK, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
+        public static final Holder<PlacedFeature> FLOWERING_FANCY_OAK_BEES_005_PLACED = registerPlaced("flowering_fancy_oak_bees_005", FLOWERING_FANCY_OAK_BEES_005, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
+        public static final Holder<PlacedFeature> FLOWERING_FANCY_OAK_BEES_002_PLACED = registerPlaced("flowering_fancy_oak_bees_002", FLOWERING_FANCY_OAK_BEES_002, List.of(PlacementUtils.filteredByBlockSurvival(FruitfulBlocks.FLOWERING_OAK_SAPLING.get())));
 
-        public static final Holder<PlacedFeature> FLOWERING_OAK_INFREQUENT = PlacementUtils.register(loc("flowering_oak_infrequent"), FLOWERING_OAK, VegetationPlacements.treePlacement(PlacementUtils.countExtra(0, 0.12F, 3)));
+        public static final Holder<ConfiguredFeature<RandomFeatureConfiguration, ?>>  TREES_FLOWER_FOREST = register("trees_flower_forest", Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(TreePlacements.BIRCH_BEES_002, 0.2F), new WeightedPlacedFeature(FLOWERING_FANCY_OAK_BEES_002_PLACED, 0.1F)), FLOWERING_OAK_BEES_002_PLACED));
+        public static final Holder<PlacedFeature> TREES_FLOWER_FOREST_PLACED = registerPlaced("trees_flower_forest", TREES_FLOWER_FOREST, PlacementUtils.countExtra(6, 0.1F, 1));
 
-        public static final Holder<ConfiguredFeature<RandomFeatureConfiguration, ?>>  TREES_FLOWER_FOREST = FeatureUtils.register(loc("trees_flower_forest"), Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(TreePlacements.BIRCH_BEES_002, 0.2F), new WeightedPlacedFeature(FLOWERING_FANCY_OAK_BEES_002_PLACED, 0.1F)), FLOWERING_OAK_BEES_002_PLACED));
-        public static final Holder<PlacedFeature> TREES_FLOWER_FOREST_PLACED = PlacementUtils.register(loc("trees_flower_forest"), TREES_FLOWER_FOREST, PlacementUtils.countExtra(6, 0.1F, 1));
+        public static <FC extends FeatureConfiguration, F extends Feature<FC>> Holder<ConfiguredFeature<FC, ?>> register(String id, F feature, FC featureConfiguration) {
+            return BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, Fruitful.MOD_ID  + ":" + id, new ConfiguredFeature<>(feature, featureConfiguration));
+        }
 
-        public static String loc(String name) {
-            return Fruitful.MOD_ID + ":" + name;
+        public static Holder<PlacedFeature> registerPlaced(String string, Holder<? extends ConfiguredFeature<?, ?>> holder, PlacementModifier... list) {
+            return BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, Fruitful.MOD_ID + ":" + string, new PlacedFeature(Holder.hackyErase(holder), List.of(list)));
+        }
+
+        public static Holder<PlacedFeature> registerPlaced(String string, Holder<? extends ConfiguredFeature<?, ?>> holder, List<PlacementModifier> list) {
+            return BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, Fruitful.MOD_ID + ":" + string, new PlacedFeature(Holder.hackyErase(holder), List.copyOf(list)));
         }
     }
 }
