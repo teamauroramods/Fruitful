@@ -58,7 +58,6 @@ public class Fruitful {
         FruitfulBlocks.BLOCKS.register(PLATFORM);
         FruitfulItems.ITEMS.register(PLATFORM);
         FruitfulFeatures.FEATURES.register(PLATFORM);
-        FruitfulFeatures.CONFIGURED_FEATURES.register(PLATFORM);
         FruitfulFeatures.TREE_DECORATOR_TYPES.register(PLATFORM);
         FruitfulFeatures.PLACED_FEATURES.register(PLATFORM);
 
