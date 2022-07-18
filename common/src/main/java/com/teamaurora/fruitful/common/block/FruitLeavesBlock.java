@@ -78,7 +78,7 @@ public class FruitLeavesBlock extends LeavesBlock {
     }
 
     private static int getDistance(BlockState neighbor) {
-        if (BlockTags.LOGS.contains(neighbor.getBlock())) {
+        if (neighbor.is(BlockTags.LOGS)) {
             return 0;
         } else {
             return neighbor.getBlock() instanceof LeavesBlock || neighbor.getBlock() instanceof OakBlossomBlock ? neighbor.getValue(DISTANCE) : 7;

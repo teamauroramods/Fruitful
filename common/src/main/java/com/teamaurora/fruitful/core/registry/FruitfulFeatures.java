@@ -5,6 +5,7 @@ import com.teamaurora.fruitful.core.Fruitful;
 import gg.moonflower.pollen.api.registry.PollinatedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.TreePlacements;
@@ -71,17 +72,5 @@ public class FruitfulFeatures {
         public static final Supplier<PlacedFeature> TREES_FLOWER_FOREST_PLACED = () -> TREES_FLOWER_FOREST.get().placed(VegetationPlacements.treePlacement(PlacementUtils.countExtra(6, 0.1F, 1)));
 
 
-        public static void registerConfiguredFeatures() {
-            CONFIGURED_FEATURES.register("flowering_oak", FLOWERING_OAK);
-            CONFIGURED_FEATURES.register("flowering_fancy_oak", FLOWERING_FANCY_OAK);
-            CONFIGURED_FEATURES.register("flowering_oak_bees_005", FLOWERING_OAK_BEES_005);
-            CONFIGURED_FEATURES.register("flowering_fancy_oak_bees_005", FLOWERING_FANCY_OAK_BEES_005);
-            CONFIGURED_FEATURES.register("flowering_oak_bees_002", FLOWERING_OAK_BEES_002);
-            CONFIGURED_FEATURES.register("flowering_fancy_oak_bees_002", FLOWERING_FANCY_OAK_BEES_002);
-
-//            PLACED_FEATURES.register("flowering_oak_infrequent", FLOWERING_OAK_INFREQUENT);
-            CONFIGURED_FEATURES.register("trees_flower_forest", TREES_FLOWER_FOREST);
-            PLACED_FEATURES.register("trees_flower_forest", TREES_FLOWER_FOREST_PLACED);
-        }
     }
 }
