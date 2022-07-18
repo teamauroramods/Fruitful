@@ -32,11 +32,6 @@ public class FruitfulBlocks {
     public static final Supplier<Block> BLOSSOMING_OAK_LEAVES = registerBlock("blossoming_oak_leaves", ()-> new OakBlossomBlock(Properties.FLOWERING_OAK_LEAVES), CreativeModeTab.TAB_DECORATIONS);
     public static final Supplier<Block> APPLE_OAK_LEAVES = registerBlock("apple_oak_leaves", ()-> new FruitLeavesBlock(Properties.FLOWERING_OAK_LEAVES, BUDDING_OAK_LEAVES.get(), ()-> Items.APPLE), CreativeModeTab.TAB_DECORATIONS);
 
-    public static final Supplier<Block> FLOWERING_OAK_LEAF_CARPET = registerBlock("flowering_oak_leaf_carpet", ()-> new LeafCarpetBlock(Properties.FLOWERING_OAK_CARPET), CreativeModeTab.TAB_DECORATIONS);
-    public static final Supplier<Block> BUDDING_OAK_LEAF_CARPET = registerBlock("budding_oak_leaf_carpet", ()-> new LeafCarpetBlock(Properties.FLOWERING_OAK_CARPET), CreativeModeTab.TAB_DECORATIONS);
-    public static final Supplier<Block> BLOSSOMING_OAK_LEAF_CARPET = registerBlock("blossoming_oak_leaf_carpet", ()-> new LeafCarpetBlock(Properties.FLOWERING_OAK_CARPET), CreativeModeTab.TAB_DECORATIONS);
-    public static final Supplier<Block> APPLE_OAK_LEAF_CARPET = registerBlock("apple_oak_leaf_carpet", ()-> new LeafCarpetBlock(Properties.APPLE_OAK_LEAVES), CreativeModeTab.TAB_DECORATIONS);
-
     public static final Supplier<Block> FLOWERING_OAK_SAPLING = registerBlock("flowering_oak_sapling", ()-> new SaplingBlock(new FloweringOakTree(), Properties.FLOWERING_OAK_SAPLING), CreativeModeTab.TAB_DECORATIONS);
     public static final Supplier<Block> POTTED_FLOWERING_OAK_SAPLING = registerPotted("potted_flowering_oak_sapling", () -> new FlowerPotBlock(FLOWERING_OAK_SAPLING.get(), BlockBehaviour.Properties.copy(Blocks.POTTED_ALLIUM)));
 
