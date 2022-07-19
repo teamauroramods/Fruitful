@@ -12,10 +12,8 @@ import gg.moonflower.pollen.api.registry.client.ColorRegistry;
 import gg.moonflower.pollen.api.registry.client.RenderTypeRegistry;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.FoliageColor;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraft.world.level.block.FireBlock;
 
 //TODO: Events
 public class Fruitful {
@@ -66,5 +64,9 @@ public class Fruitful {
 
     public static void onCommonPostInit(Platform.ModSetupContext ctx) {
        ctx.enqueueWork(FruitfulData::init);
+    }
+
+    public static ResourceLocation loc(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 }
