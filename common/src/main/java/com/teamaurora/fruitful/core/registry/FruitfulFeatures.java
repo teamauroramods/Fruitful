@@ -44,28 +44,34 @@ public class FruitfulFeatures {
     public static final BeehiveDecorator FRUITFUL_BEEHIVE_0002 = new BeehiveDecorator(0.002F);
     public static final BeehiveDecorator FRUITFUL_BEEHIVE_005 = new BeehiveDecorator(0.05F);
 
-    public static final class BlockStates {
-        public static final BlockState FLOWERING_OAK_LEAVES = FruitfulBlocks.FLOWERING_OAK_LEAVES.get().defaultBlockState();
-        public static final BlockState BUDDING_OAK_LEAVES = FruitfulBlocks.BUDDING_OAK_LEAVES.get().defaultBlockState();
-    }
-
     public static final class Configured {
 
         private static final Logger LOGGER = LogManager.getLogger();
         public static final PollinatedRegistry<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES = PollinatedRegistry.create(BuiltinRegistries.CONFIGURED_FEATURE, Fruitful.MOD_ID);
         public static final PollinatedRegistry<PlacedFeature> PLACEMENTS = PollinatedRegistry.create(BuiltinRegistries.PLACED_FEATURE, Fruitful.MOD_ID);
 
+        public static TreeConfiguration.TreeConfigurationBuilder fancyOakConfig() {
+            return (new TreeConfiguration.TreeConfigurationBuilder(
+                    BlockStateProvider.simple(Blocks.OAK_LOG),
+                    new FancyTrunkPlacer(3, 11, 0),
+                    new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(FruitfulBlocks.BUDDING_OAK_LEAVES.get().defaultBlockState(), 2).add(FruitfulBlocks.FLOWERING_OAK_LEAVES.get().defaultBlockState(), 1).build()),
+                    new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+                    new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))))
+                    .ignoreVines();
+        }
+
+
         public static final TreeConfiguration.TreeConfigurationBuilder FANCY_FLOWERING_OAK_CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.OAK_LOG),
                 new FancyTrunkPlacer(3, 11, 0),
-                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1).build()),
+                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(FruitfulBlocks.BUDDING_OAK_LEAVES.get().defaultBlockState(), 2).add(FruitfulBlocks.FLOWERING_OAK_LEAVES.get().defaultBlockState(), 1).build()),
                 new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
                 new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))))
                 .ignoreVines();
         public static final TreeConfiguration.TreeConfigurationBuilder FLOWERING_OAK_CONFIG = (new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.OAK_LOG),
                 new StraightTrunkPlacer(4, 2, 0),
-                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(BlockStates.BUDDING_OAK_LEAVES, 2).add(BlockStates.FLOWERING_OAK_LEAVES, 1).build()),
+                new WeightedStateProvider(new SimpleWeightedRandomList.Builder<BlockState>().add(FruitfulBlocks.BUDDING_OAK_LEAVES.get().defaultBlockState(), 2).add(FruitfulBlocks.BUDDING_OAK_LEAVES.get().defaultBlockState(), 1).build()),
                 new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
                 new TwoLayersFeatureSize(1, 0, 1)));
 
@@ -86,7 +92,7 @@ public class FruitfulFeatures {
 
         public static final Supplier<ConfiguredFeature<RandomFeatureConfiguration, ?>>  TREES_FLOWER_FOREST = CONFIGURED_FEATURES.register("trees_flower_forest", () -> new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(TreePlacements.BIRCH_BEES_002, 0.2F), new WeightedPlacedFeature(Holder.direct(FLOWERING_FANCY_OAK_BEES_002_PLACED.get()), 0.1F)), Holder.direct(FLOWERING_OAK_BEES_002_PLACED.get()))));
         public static final Supplier<PlacedFeature> TREES_FLOWER_FOREST_PLACED = PLACEMENTS.register("trees_flower_forest", () -> new PlacedFeature(Holder.direct(TREES_FLOWER_FOREST.get()), VegetationPlacements.treePlacement(PlacementUtils.countExtra(6, 0.1F, 1))));
-        public static final Supplier<PlacedFeature> FLOWERING_OAK_INFREQUENT = PLACEMENTS.register("flowering_oak_infrequent", () -> new PlacedFeature(Holder.direct(FLOWERING_OAK.get()), VegetationPlacements.treePlacement(PlacementUtils.countExtra(1, 0.1F, 1), Blocks.OAK_SAPLING)));
+        public static final Supplier<PlacedFeature> FLOWERING_OAK_INFREQUENT = PLACEMENTS.register("flowering_oak_infrequent", () -> new PlacedFeature(Holder.direct(FLOWERING_OAK.get()), VegetationPlacements.treePlacement(PlacementUtils.countExtra(1, 0.1F, 0), Blocks.OAK_SAPLING)));
         public static final ResourceKey<PlacedFeature> FLOWERING_OAK_KEY = ResourceKey.create(Registry.PLACED_FEATURE_REGISTRY, Fruitful.location("flowering_oak_infrequent"));
         public static final ResourceKey<PlacedFeature> FLOWER_FOREST_TREES_KEY = ResourceKey.create(Registry.PLACED_FEATURE_REGISTRY, Fruitful.location("trees_flower_forest"));
 
