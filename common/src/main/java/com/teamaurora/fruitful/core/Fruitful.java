@@ -2,6 +2,7 @@ package com.teamaurora.fruitful.core;
 
 import com.teamaurora.fruitful.core.other.FruitfulData;
 import com.teamaurora.fruitful.core.registry.FruitfulBlocks;
+import com.teamaurora.fruitful.core.registry.FruitfulEffects;
 import com.teamaurora.fruitful.core.registry.FruitfulFeatures;
 import com.teamaurora.fruitful.core.registry.FruitfulItems;
 import gg.moonflower.pollen.api.config.ConfigManager;
@@ -14,11 +15,13 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.FoliageColor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //TODO: Events
 public class Fruitful {
     public static final String MOD_ID = "fruitful";
-    public static final FruitfulCommonConfig CONFIG = ConfigManager.register(MOD_ID, PollinatedConfigType.COMMON, FruitfulCommonConfig::new);
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static final Platform PLATFORM = Platform.builder(MOD_ID)
             .clientInit(() -> Fruitful::onClientInit)
             .clientPostInit(() -> Fruitful::onClientPostInit)
@@ -42,23 +45,19 @@ public class Fruitful {
     }
 
     public static void onClientPostInit(Platform.ModSetupContext ctx) {
-        ctx.enqueueWork(() -> {
-            RenderTypeRegistry.register(FruitfulBlocks.APPLE_OAK_LEAVES.get(), RenderType.cutoutMipped());
-            RenderTypeRegistry.register(FruitfulBlocks.FLOWERING_OAK_LEAVES.get(), RenderType.cutoutMipped());
-            RenderTypeRegistry.register(FruitfulBlocks.BUDDING_OAK_LEAVES.get(), RenderType.cutoutMipped());
-            RenderTypeRegistry.register(FruitfulBlocks.BLOSSOMING_OAK_LEAVES.get(), RenderType.cutoutMipped());
-            RenderTypeRegistry.register(FruitfulBlocks.FLOWERING_OAK_SAPLING.get(), RenderType.cutoutMipped());
-            RenderTypeRegistry.register(FruitfulBlocks.POTTED_FLOWERING_OAK_SAPLING.get(), RenderType.cutoutMipped());
-        });
+        RenderTypeRegistry.register(FruitfulBlocks.APPLE_OAK_LEAVES.get(), RenderType.cutoutMipped());
+        RenderTypeRegistry.register(FruitfulBlocks.FLOWERING_OAK_LEAVES.get(), RenderType.cutoutMipped());
+        RenderTypeRegistry.register(FruitfulBlocks.BUDDING_OAK_LEAVES.get(), RenderType.cutoutMipped());
+        RenderTypeRegistry.register(FruitfulBlocks.BLOSSOMING_OAK_LEAVES.get(), RenderType.cutoutMipped());
+        RenderTypeRegistry.register(FruitfulBlocks.FLOWERING_OAK_SAPLING.get(), RenderType.cutoutMipped());
+        RenderTypeRegistry.register(FruitfulBlocks.POTTED_FLOWERING_OAK_SAPLING.get(), RenderType.cutoutMipped());
     }
 
     public static void onCommonInit() {
-        FruitfulBlocks.BLOCKS.register(PLATFORM);
-        FruitfulItems.ITEMS.register(PLATFORM);
-        FruitfulFeatures.FEATURES.register(PLATFORM);
-        FruitfulFeatures.TREE_DECORATOR_TYPES.register(PLATFORM);
-        FruitfulFeatures.PLACED_FEATURES.register(PLATFORM);
-
+        FruitfulBlocks.load(PLATFORM);
+        FruitfulItems.load(PLATFORM);
+        FruitfulEffects.load(PLATFORM);
+        FruitfulFeatures.Configured.load(PLATFORM);
         ModifyTradesEvents.WANDERER.register((event) -> event.getGeneric().add(FruitfulBlocks.FLOWERING_OAK_SAPLING, 5, 1, 8, 1, 0.15F, true));
     }
 
@@ -66,7 +65,7 @@ public class Fruitful {
        ctx.enqueueWork(FruitfulData::init);
     }
 
-    public static ResourceLocation loc(String path) {
+    public static ResourceLocation location(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
 }

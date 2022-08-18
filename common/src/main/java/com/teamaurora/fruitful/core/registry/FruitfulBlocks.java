@@ -5,6 +5,7 @@ import com.teamaurora.fruitful.common.block.OakBlossomBlock;
 import com.teamaurora.fruitful.common.block.OakFlowerLeavesBlock;
 import com.teamaurora.fruitful.common.block.trees.FloweringOakTreeGrower;
 import com.teamaurora.fruitful.common.item.TabInsertBlockItem;
+import gg.moonflower.pollen.api.platform.Platform;
 import gg.moonflower.pollen.api.registry.PollinatedBlockRegistry;
 import gg.moonflower.pollen.api.registry.PollinatedRegistry;
 import net.minecraft.core.BlockPos;
@@ -18,20 +19,23 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class FruitfulBlocks {
+
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final PollinatedBlockRegistry BLOCKS = PollinatedRegistry.createBlock(FruitfulItems.ITEMS);
 
-    /* Apple Oak Trees */
-    public static final Supplier<Block> FLOWERING_OAK_LEAVES = BLOCKS.registerWithItem("flowering_oak_leaves", () -> new OakFlowerLeavesBlock(Properties.FLOWERING_LEAVES), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
-    public static final Supplier<Block> BUDDING_OAK_LEAVES = BLOCKS.registerWithItem("budding_oak_leaves", () -> new OakFlowerLeavesBlock(Properties.FLOWERING_LEAVES), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
-    public static final Supplier<Block> BLOSSOMING_OAK_LEAVES = BLOCKS.registerWithItem("blossoming_oak_leaves", () -> new OakBlossomBlock(Properties.FLOWERING_LEAVES), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
-    public static final Supplier<Block> APPLE_OAK_LEAVES = BLOCKS.registerWithItem("apple_oak_leaves", () -> new FruitLeavesBlock(Properties.FLOWERING_LEAVES, BUDDING_OAK_LEAVES.get(), ()-> Items.APPLE), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
+    public static final Supplier<Block> FLOWERING_OAK_LEAVES = BLOCKS.registerWithItem("flowering_oak_leaves", () -> new OakFlowerLeavesBlock(Properties.FLOWERING_LEAVES), followItem(Items.OAK_LEAVES, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+    public static final Supplier<Block> BUDDING_OAK_LEAVES = BLOCKS.registerWithItem("budding_oak_leaves", () -> new OakFlowerLeavesBlock(Properties.FLOWERING_LEAVES), followItem(Items.OAK_LEAVES, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+    public static final Supplier<Block> BLOSSOMING_OAK_LEAVES = BLOCKS.registerWithItem("blossoming_oak_leaves", () -> new OakBlossomBlock(Properties.FLOWERING_LEAVES), followItem(Items.OAK_LEAVES, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+    public static final Supplier<Block> APPLE_OAK_LEAVES = BLOCKS.registerWithItem("apple_oak_leaves", () -> new FruitLeavesBlock(Properties.FLOWERING_LEAVES, BUDDING_OAK_LEAVES.get(), () -> Items.APPLE), followItem(Items.OAK_LEAVES, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
 
-    public static final Supplier<Block> FLOWERING_OAK_SAPLING = BLOCKS.registerWithItem("flowering_oak_sapling", () -> new SaplingBlock(new FloweringOakTreeGrower(), Properties.FLOWERING_OAK_SAPLING), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
+    public static final Supplier<Block> FLOWERING_OAK_SAPLING = BLOCKS.registerWithItem("flowering_oak_sapling", () -> new SaplingBlock(new FloweringOakTreeGrower(), Properties.FLOWERING_OAK_SAPLING), followItem(Items.OAK_SAPLING, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
     public static final Supplier<Block> POTTED_FLOWERING_OAK_SAPLING = BLOCKS.register("potted_flowering_oak_sapling", createFlowerPot(FLOWERING_OAK_SAPLING));
 
     private static Supplier<Block> createFlowerPot(Supplier<Block> block) {
@@ -40,6 +44,11 @@ public class FruitfulBlocks {
 
     private static Function<Block, Item> followItem(Item insertAfter, Item.Properties properties) {
         return object -> new TabInsertBlockItem(insertAfter, object, properties);
+    }
+
+    public static void load(Platform platform) {
+        LOGGER.debug("Registered to platform");
+        BLOCKS.register(platform);
     }
 
     public static final class Properties {

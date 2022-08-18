@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @Mixin(Player.class)
 public abstract class PlayerMixin {
-    @Inject(at = @At("HEAD"), method = "eat", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "eat")
     public void fruitfulEat(Level level, ItemStack itemStack, CallbackInfoReturnable<ItemStack> cir) {
         Player player = (Player) (Object) this;
 
