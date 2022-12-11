@@ -57,7 +57,7 @@ public class Fruitful {
         FruitfulBlocks.load(PLATFORM);
         FruitfulItems.load(PLATFORM);
         FruitfulEffects.load(PLATFORM);
-        FruitfulFeatures.Configured.load(PLATFORM);
+        FruitfulFeatures.load(PLATFORM);
         ModifyTradesEvents.WANDERER.register((event) -> event.getGeneric().add(FruitfulBlocks.FLOWERING_OAK_SAPLING, 5, 1, 8, 1, 0.15F, true));
     }
 

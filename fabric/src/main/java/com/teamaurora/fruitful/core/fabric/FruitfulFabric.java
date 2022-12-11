@@ -17,11 +17,22 @@ public class FruitfulFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         Fruitful.PLATFORM.setup();
+        modifyBiomes();
+    }
+
+
+    private static void modifyBiomes() {
+
+        //replace flower forest trees
         BiomeModifications.create(Fruitful.location("replace_flower_forest_trees")).add(ModificationPhase.REPLACEMENTS, BiomeSelectors.includeByKey(Biomes.FLOWER_FOREST), modifier -> {
             if (modifier.getGenerationSettings().removeFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.TREES_FLOWER_FOREST.unwrapKey().orElseThrow())) {
-                modifier.getGenerationSettings().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FruitfulFeatures.Configured.FLOWER_FOREST_TREES_KEY);
+                modifier.getGenerationSettings().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, FruitfulFeatures.Keys.FLOWER_FOREST_TREES_KEY);
             }
         });
-        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_FOREST), GenerationStep.Decoration.VEGETAL_DECORATION, FruitfulFeatures.Configured.FLOWERING_OAK_KEY);
+
+        //add flowering oak trees
+        BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_FOREST), GenerationStep.Decoration.VEGETAL_DECORATION, FruitfulFeatures.Keys.FLOWERING_OAK_INFREQUENT_KEY);
+
     }
+
 }
