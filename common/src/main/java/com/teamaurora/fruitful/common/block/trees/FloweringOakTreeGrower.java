@@ -13,10 +13,7 @@ import java.util.Random;
 public class FloweringOakTreeGrower extends AbstractTreeGrower {
     @Override
     protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random random, boolean largeHive) {
-        if (random.nextInt(10) == 0) {
-            return largeHive ? Holder.direct(FruitfulFeatures.Configured.FLOWERING_FANCY_OAK_BEES_CHECKED.get()) : Holder.direct(FruitfulFeatures.Configured.FLOWERING_FANCY_OAK_CHECKED.get());
-        } else {
-            return largeHive ? Holder.direct(FruitfulFeatures.Configured.FLOWERING_OAK_BEES_CHECKED.get()) : Holder.direct(FruitfulFeatures.Configured.FLOWERING_OAK_CHECKED.get());
-        }
+        return random.nextInt(10) == 0 ? (largeHive ? Holder.direct(FruitfulFeatures.Configured.FLOWERING_FANCY_OAK_BEES_CHECKED.get()) : Holder.direct(FruitfulFeatures.Configured.FLOWERING_FANCY_OAK_CHECKED.get()))
+                : (largeHive ? Holder.direct(FruitfulFeatures.Configured.FLOWERING_OAK_BEES_CHECKED.get()) : Holder.direct(FruitfulFeatures.Configured.FLOWERING_OAK_CHECKED.get()));
     }
 }

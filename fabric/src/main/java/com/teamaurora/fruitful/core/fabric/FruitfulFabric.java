@@ -20,7 +20,6 @@ public class FruitfulFabric implements ModInitializer {
         modifyBiomes();
     }
 
-
     private static void modifyBiomes() {
 
         //replace flower forest trees
